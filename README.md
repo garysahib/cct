@@ -1,7 +1,7 @@
 # cct
 Capabilities and Context (Conditions) Tokens
 
-Love this direction. Here’s a crisp, practitioner-oriented unpacking of each point with concrete patterns you can implement right away (and a straw-man spec you can iterate on).
+a straw-man spec
 
 ⸻
 
