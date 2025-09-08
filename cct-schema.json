@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CCT (Capabilities & Context Token) Schema",
+  "type": "object",
+  "required": ["typ","iss","sub","aud","cap","ctx","exp","jti","proof"],
+  "properties": {
+    "typ": { "type": "string", "enum": ["CCT"] },
+    "iss": { "type": "string" },
+    "sub": { "type": "string" },
+    "aud": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "act": { "type": "string" },
+    "cap": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tool","scope"],
+        "properties": {
+          "tool": { "type": "string" },
+          "scope": { "type": "string" },
+          "limit": { "type": "object" },
+          "attrs": { "type": "object" }
+        }
+      }
+    },
+    "ctx": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "string" },
+        "prompt_sha256": { "type": "string" },
+        "purpose": { "type": "string" },
+        "chain_id": { "type": "string" },
+        "caller_chain": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "proof": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["dpop","mtls","none"] },
+        "jkt": { "type": "string" },
+        "spki": { "type": "string" }
+      }
+    },
+    "exp": { "type": "integer", "description": "expiry unix epoch seconds" },
+    "nbf": { "type": "integer" },
+    "iat": { "type": "integer" },
+    "jti": { "type": "string" }
+  },
+  "additionalProperties": false
+}
