@@ -173,3 +173,12 @@ Minimal MVP checklist
 	•	Label & segment your top 3 data sources; wire redaction
 	•	Stand up a signals topic (cct.*, agent.*) and basic risk rules
 
+Practical choices & recommendations
+	•	Token format: JWS (JWT) for easy use; consider Biscuit or Macaroons if you want stronger attenuation semantics where tokens can be attenuated offline without re-signing by AAG (tradeoffs: ecosystem & complexity).
+	•	Proof-of-possession: DPoP + mTLS (mutual TLS) — ensure agent process holds key material in a protected enclave or ephemeral process memory.
+	•	TTL: 30–120 seconds for leaf/child CCTs; orchestrator-level CCTs up to a few minutes only if strictly necessary. Default short TTLs reduces blast radius.
+	•	Attenuation model: child-CCTs can only further narrow scope, never broaden. AAG must log all child-CCT issuance tied to parent jti.
+	•	Signal bus: publish cct.issued, cct.revoked, cct.child_issued, cct.denied, and data-access events with chain_id for correlating audits.
+	•	Filter-before-search: vector DBs must accept a required segment filter before yielding results. Do not fetch embeddings across segments and filter after.
+	•	Plan validation UI: for risky flows require signed human approval (HITL) recorded in the chain_id provenance.
+
