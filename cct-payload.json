@@ -1,0 +1,33 @@
+{
+  "typ": "CCT",
+  "iss": "https://aag.yourco.com",
+  "sub": "agent:orders-summarizer@tenant-123",
+  "act": "user:alice",
+  "aud": ["svc:orders-api.v2","svc:vector-db"],
+  "cap": [
+    {
+      "tool": "orders.read",
+      "scope": "tenant-123:orders:non_pii",
+      "limit": {"rows": 1000}
+    },
+    {
+      "tool": "vector.search",
+      "scope": "kb:shipping",
+      "attrs": {"topK": 10}
+    }
+  ],
+  "ctx": {
+    "model": "gpt-xyz:2025-08",
+    "prompt_sha256": "e3b0c44298fc1c149afbf4c8996fb924...",
+    "purpose": "customer_support_summary",
+    "chain_id": "req-7f2a1c",
+    "caller_chain": ["ui:web","svc:orchestrator"]
+  },
+  "proof": {
+    "type": "dpop",
+    "jkt": "ABCD1234..."
+  },
+  "exp": 1736323200,
+  "iat": 1736323140,
+  "jti": "cct-7f2a1c-01"
+}
