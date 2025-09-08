@@ -1,0 +1,35 @@
+Absolutely — here’s the whole thing boiled down to the top bullet points:
+
+⸻
+
+	•	Keep OIDC/OAuth as source of truth, but never hand those tokens to agents.
+	•	Introduce CCTs (Capabilities & Context Tokens): short-lived, proof-of-possession tokens encoding what, where, with which data, and for what prompt/model.
+	•	CCT structure: issuer, subject (agent), act-as user, audience (tools/services), capabilities (tool + scope + limits), context (model, prompt hash, purpose, chain), proof (DPoP/mTLS), short expiry.
+	•	Attenuation: agents can mint child CCTs that only narrow (never expand) capabilities.
+	•	Runtime authN/Z inline: every tool call checked against CCT + live signals (risk, posture, data labels).
+	•	OPA/Rego enforcement: embed in tool adapters or call via Envoy ext_authz.
+	•	Data segmentation: label and split data by tenant, geography, sensitivity, PII, etc.; enforce “filter-before-search” in vector DBs; redact/mask at boundaries.
+	•	Verification gates:
+	1.	Input gate (prompt validation, hash, jailbreak detection)
+	2.	Plan gate (check proposed tools vs CCT)
+	3.	Execution gate (inline checks per call, rate limits, redaction)
+	4.	Explainer/Verifier (check outputs, prevent leakage, run DLP/factual checks)
+	5.	Output gate (log, audit, provenance, emit signals)
+	•	Signals bus: publish cct.issued, cct.child_issued, cct.revoked, cct.denied, agent.plan_flagged, data.accessed for SIEM/risk engines.
+	•	Security posture:
+	•	Short TTLs (30–120s)
+	•	Proof-of-possession (DPoP/mTLS)
+	•	No broad bearer tokens
+	•	Strong audit/provenance via chain_id
+	•	Implementation stack:
+	•	AAG (Agent Access Gateway): OIDC → CCT minting, attenuation
+	•	OPA/Rego bundle: for policies (tool, scope, limits, signals)
+	•	Envoy ext_authz: inline enforcement at tool adapters
+	•	Adapters: embed checks + redaction logic before calling tools
+
+⸻
+
+👉 Net effect: you contain AI agents with capability-scoped, context-aware tokens, enforce policies dynamically, and gate every prompt/task with a verification pipeline — no raw OAuth tokens, no over-broad access, full auditability.
+
+⸻
+
