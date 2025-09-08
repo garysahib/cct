@@ -1,0 +1,12 @@
+{
+  "http": {
+    "method": "GET",
+    "path": "/orders/1234",
+    "headers": { "x-agent-id": "agent:orders-summarizer", "authorization": "CCT <token>" }
+  },
+  "request": {
+    "tool": { "name": "orders.read", "scope": "tenant-123:orders:non_pii", "rows": 100 }
+  },
+  "cct": { ...parsed claims... },
+  "signals": { "risk_score": 32, "device_posture": "healthy" }
+}
